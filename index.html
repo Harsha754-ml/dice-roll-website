@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dice Roll Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .dice {
+      font-size: 100px;
+      margin: 20px auto;
+    }
+    /* Shake animation keyframes for rolling effect */
+    @keyframes shake {
+      0%   { transform: rotate(0deg) scale(1); }
+      25%  { transform: rotate(10deg) scale(1.1); }
+      50%  { transform: rotate(-10deg) scale(1.1); }
+      75%  { transform: rotate(10deg) scale(1.1); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+    .rolling {
+      animation: shake 0.6s ease-in-out infinite;
+    }
+    /* Smaller button style */
+    button {
+      padding: 6px 12px;
+      font-size: 14px;
+      border: none;
+      background: #007BFF;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dice Roll</h1>
+    <div id="dice" class="dice">🎲</div>
+    <button id="rollButton">Roll Dice</button>
+  </div>
+
+  <script>
+    const rollButton = document.getElementById('rollButton');
+    const diceElement = document.getElementById('dice');
+
+    rollButton.addEventListener('click', rollDice);
+
+    function rollDice() {
+      // Disable the button during roll animation
+      rollButton.disabled = true;
+
+      // Add rolling animation class
+      diceElement.classList.add('rolling');
+
+      // Start rapidly cycling through dice faces every 100ms
+      let intervalId = setInterval(() => {
+        // Generate a random dice face (using Unicode from ⚀ - ⚅)
+        const randomNum = Math.floor(Math.random() * 6);
+        const diceChar = String.fromCodePoint(0x2680 + randomNum);
+        diceElement.textContent = diceChar;
+      }, 100);
+
+      // After 1 second, stop the interval and show final dice face
+      setTimeout(() => {
+        clearInterval(intervalId);
+        // Remove the rolling animation class
+        diceElement.classList.remove('rolling');
+
+        // Settle on a final random dice face
+        const finalNum = Math.floor(Math.random() * 6);
+        const finalDiceChar = String.fromCodePoint(0x2680 + finalNum);
+        diceElement.textContent = finalDiceChar;
+
+        // Re-enable the button
+        rollButton.disabled = false;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
